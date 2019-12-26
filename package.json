@@ -10,7 +10,8 @@
     "start": "electron ./src/main.js"
   },
   "dependencies": {
-    "blockly": "^3.20191014.4"
+    "blockly": "^3.20191014.4",
+    "electron-prompt": "^1.4.0"
   },
   "devDependencies": {
     "electron": "^7.1.7",
