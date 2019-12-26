@@ -1,0 +1,19 @@
+{
+  "name": "STM32-Blockly",
+  "version": "1.0.0",
+  "description": "Transforming Blockly into STM32 C language",
+  "main": "dist/main.js",
+  "repository": "https://github.com/austin880625/STM32-Blockly.git",
+  "author": "Austin Chang <austin880625@gmail.com> Zheng-Dao Yang <s1357andy871207@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ./src/main.js"
+  },
+  "dependencies": {
+    "blockly": "^3.20191014.4"
+  },
+  "devDependencies": {
+    "electron": "^7.1.7",
+    "webpack-cli": "^3.3.10"
+  }
+}

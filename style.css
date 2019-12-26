@@ -1,0 +1,11 @@
+body {
+    margin: 0px;
+}
+#blockly-area {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+#blockly-root {
+    position: absolute;
+}
