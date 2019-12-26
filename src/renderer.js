@@ -1,10 +1,20 @@
 const Blockly = require('blockly');
-const { ipcRenderer } = require('electron');
+const prompt = require('electron-prompt');
 const { readFileSync } = require('fs');
 
 let blocklyArea = document.getElementById("blockly-area");
 let blocklyRoot = document.getElementById("blockly-root");
 let toolbox = readFileSync("toolbox.xml", { encoding: 'utf-8' });
+
+Blockly.prompt = function(msg, defaultValue, callback) {
+  prompt({
+    title: msg,
+    label: msg,
+    type: 'input',
+  }, defaultValue).then((result) => {
+    callback(result);
+  });
+};
 
 let workspace = Blockly.inject(blocklyRoot, {
   toolbox: toolbox,
