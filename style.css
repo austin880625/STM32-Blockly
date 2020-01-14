@@ -1,11 +1,12 @@
-body {
+body,input {
     margin: 0px;
+    font-size: 24px;
 }
-#blockly-area {
-    height: 100%;
-    width: 100%;
-    position: absolute;
+
+.btn {
+    margin: 5px;
 }
-#blockly-root {
-    position: absolute;
+
+.spinner {
+    display: none;
 }

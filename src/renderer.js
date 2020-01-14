@@ -1,42 +1,58 @@
-const Blockly = require('blockly');
 const prompt = require('electron-prompt');
+const { ipcRenderer } = require('electron');
 const { readFileSync } = require('fs');
+const $ = require('jquery');
 
-let blocklyArea = document.getElementById("blockly-area");
-let blocklyRoot = document.getElementById("blockly-root");
-let toolbox = readFileSync("toolbox.xml", { encoding: 'utf-8' });
+let devList = [];
 
-Blockly.prompt = function(msg, defaultValue, callback) {
-  prompt({
-    title: msg,
-    label: msg,
-    type: 'input',
-  }, defaultValue).then((result) => {
-    callback(result);
-  });
-};
-
-let workspace = Blockly.inject(blocklyRoot, {
-  toolbox: toolbox,
+ipcRenderer.on('dev-list-update', function(e, arg) {
+  devList = arg.list;
+  let listHTML = devList.map((item) => `<option value="${item}">${item}</option>`).join('\n');
+  $("#port_list").html(listHTML);
 });
 
-let onresize = (e = null) => {
-  let element = blocklyArea;
-  let x = 0, y = 0;
-  do {
-    x += element.offsetLeft;
-    y += element.offsetTop;
-    element = element.parentElement;
-  } while (element);
-  blocklyRoot.style.left = x + 'px';
-  blocklyRoot.style.top = y + 'px';
-  blocklyRoot.style.height = blocklyArea.offsetHeight + 'px';
-  blocklyRoot.style.width = blocklyArea.offsetWidth + 'px';
+ipcRenderer.on('command-reply', function(e, arg) {
+  if(arg.command == "1" || arg.command == "5") {
+    $("#current_option").text(arg.value);
+  } else if(arg.command == "") {
+  }
+  $(".spinner").hide();
+});
 
-  Blockly.svgResize(workspace);
-}
-
-onresize();
-
-window.addEventListener('resize', onresize, false);
-Blockly.svgResize(workspace);
+$(document).ready(function() {
+  ipcRenderer.send('dev-list-update');
+  $(".btn").click(function() {
+    $(".spinner").show();
+  });
+  $("#upload_btn").click(function(e) {
+    console.log('upload');
+    let dev = "/dev/" + $("#port_list").val();
+    let fileInput = document.getElementById("bin_file");
+    if(typeof fileInput.files[0] !== 'undefined') {
+      let binaryPath = fileInput.files[0].path;
+      console.log(binaryPath);
+      ipcRenderer.send('run-command', [dev, "4", binaryPath]);
+    }
+  });
+  $("#get_btn").click(function(e) {
+    console.log('get');
+    let dev = "/dev/" + $("#port_list").val();
+    ipcRenderer.send('run-command', [dev, "1"]);
+  });
+  $("#set_btn").click(function(e) {
+    console.log('set');
+    let newOption = $("#new_option").val() || "0";
+    let dev = "/dev/" + $("#port_list").val();
+    ipcRenderer.send('run-command', [dev, "5", newOption]);
+  });
+  $("#run_btn").click(function(e) {
+    console.log('run');
+    let dev = "/dev/" + $("#port_list").val();
+    ipcRenderer.send('run-command', [dev, "2"]);
+  });
+  $("#reset_btn").click(function(e) {
+    console.log('reset');
+    let dev = "/dev/" + $("#port_list").val();
+    ipcRenderer.send('run-command', [dev, "3"]);
+  });
+});

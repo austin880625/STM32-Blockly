@@ -2,13 +2,48 @@
 <html>
     <head>
         <title>STM32 Blockly</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
         <link type="text/css" rel="stylesheet" href="style.css">
+        <script src="src/renderer.js" ></script>
     </head>
     <body>
-        <div id="blockly-area">
-            <div id="blockly-root"></div>
+        <div class="mdl-layout mdl-js-layout">
+            <div class="mdl-grid">
+                <div id="bin-form mdl-cell">
+                    <input type="file" id="bin_file">
+                    <label for="option">Option</label>
+                    <input type="number" name="option" id="new_option">
+                    <div id=""></div>
+                </div>
+            </div>
+            <div class="mdl-grid">
+                Port: <select id="port_list"></select>
+            </div>
+            <div class="mdl-grid">
+                <div class="spinner mdl-spinner mdl-js-spinner is-active"></div>
+            </div>
+            <div class="mdl-grid">
+                Current Option: <span id="current_option"></span>
+            </div>
+            <div class="mdl-grid">
+                <div id="upload_btn" class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+                    Upload
+                </div>
+                <div id="get_btn" class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Get
+                </div>
+                <div id="set_btn" class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Set
+                </div>
+                <div id="run_btn" class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Run
+                </div>
+                <div id="reset_btn" class="btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    Reset
+                </div>
+            </div>
         </div>
-        
-        <script src="src/renderer.js"></script>
     </body>
 </html>

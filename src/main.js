@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path")
+const { spawnSync } = require("child_process");
 const { readFileSync } = require("fs");
 
 let win;
@@ -16,6 +17,25 @@ function createWindow() {
   win.loadFile(path.join(__dirname, "../index.html"));
   win.on("closed", () => {
     win = null;
+  });
+
+  ipcMain.on('dev-list-update', function(e) {
+    let result = spawnSync("sh", ["-c","ls /dev/ | grep ttyUSB"]); 
+    console.log('command result: ', result.stdout.toString('utf-8'));
+    let devList = result.stdout.toString('utf-8').trim().split('\n');
+    console.log(devList);
+    e.reply('dev-list-update', {
+    list: devList
+    });
+  });
+
+  ipcMain.on('run-command', function(e, arg) {
+    let timeout = (arg[1] == "4" ? undefined : 10000);
+    let result = spawnSync("./pc.out", arg, {timeout: timeout});
+    e.reply('command-reply', {
+      command: arg[1],
+      value: result.stdout.toString('utf-8')
+    })
   });
 }
 
