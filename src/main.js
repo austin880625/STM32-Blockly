@@ -7,7 +7,7 @@ let win;
 
 function createWindow() {
   win = new BrowserWindow({
-    height: 768,
+    height: 768 / 3,
     width: 1024,
     webPreferences: {
       nodeIntegration: true
@@ -31,7 +31,7 @@ function createWindow() {
 
   ipcMain.on('run-command', function(e, arg) {
     let timeout = (arg[1] == "4" ? undefined : 10000);
-    let result = spawnSync("./pc.out", arg, {timeout: timeout});
+    let result = spawnSync("./pc.out", arg, {timeout: timeout, stdio: ["pipe", "pipe", process.stderr]});
     e.reply('command-reply', {
       command: arg[1],
       value: result.stdout.toString('utf-8')
